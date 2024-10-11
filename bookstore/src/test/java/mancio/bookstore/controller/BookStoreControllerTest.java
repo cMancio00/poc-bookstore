@@ -1,7 +1,10 @@
 package mancio.bookstore.controller;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.ignoreStubs;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static java.util.Arrays.asList;
 import java.util.List;
@@ -9,6 +12,7 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -37,5 +41,26 @@ class BookStoreControllerTest {
 		when(publisherRepository.findAll()).thenReturn(publishers);
 		bookStoreController.findAllPublishers();
 		verify(publisherView).showAllPublishers(publishers);
+	}
+	
+	@Test
+	@DisplayName("New Publisher when is not already existing")
+	void testNewPublisherWhenNotAlreadyExisting(){
+		Publisher publisher = new Publisher("1","test");
+		bookStoreController.addNewPublisher(publisher);
+		InOrder inOrder = inOrder(publisherRepository,publisherView);
+		inOrder.verify(publisherRepository).save(publisher);
+		inOrder.verify(publisherView).publisherAdded(publisher);
+	}
+	
+	@Test
+	@DisplayName("New Publisher when is already present")
+	void testNewPublisherWhenExisting() {
+		Publisher existingPublisher = new Publisher("1","existing");
+		Publisher toAdd = new Publisher("1","toAdd");
+		when(publisherRepository.findById("1")).thenReturn(existingPublisher);
+		bookStoreController.addNewPublisher(toAdd);
+		verify(publisherView).showError("Already existing publisher with id 1", existingPublisher);
+		verifyNoMoreInteractions(ignoreStubs(publisherRepository));
 	}
 }

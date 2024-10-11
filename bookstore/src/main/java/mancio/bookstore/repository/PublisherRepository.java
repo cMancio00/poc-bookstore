@@ -8,4 +8,8 @@ public interface PublisherRepository {
 
 	List<Publisher> findAll();
 
+	Publisher findById(String string);
+
+	void save(Publisher publisher);
+
 }

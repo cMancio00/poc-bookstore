@@ -8,4 +8,8 @@ public interface PublisherView {
 
 	void showAllPublishers(List<Publisher> publishers);
 
+	void publisherAdded(Publisher publisher);
+
+	void showError(String string, Publisher publisher);
+
 }
