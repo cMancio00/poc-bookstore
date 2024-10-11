@@ -1,7 +1,5 @@
 package mancio.bookstore.controller;
 
-import java.util.List;
-
 import mancio.bookstore.model.Publisher;
 import mancio.bookstore.repository.PublisherRepository;
 import mancio.bookstore.view.PublisherView;
