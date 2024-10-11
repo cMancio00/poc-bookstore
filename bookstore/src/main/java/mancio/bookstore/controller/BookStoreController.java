@@ -31,4 +31,13 @@ public class BookStoreController {
 		}
 	}
 
+	public void deletePublisher(Publisher publisher) {
+		Publisher foundPublisher = publisherRepository.findById(publisher.getId());
+		if (foundPublisher != null) {
+			publisherRepository.delete(foundPublisher.getId());
+			publisherView.publisherRemoved(publisher);
+		}else
+			publisherView.showError("No publisher with id " + publisher.getId(), publisher);
+	}
+
 }

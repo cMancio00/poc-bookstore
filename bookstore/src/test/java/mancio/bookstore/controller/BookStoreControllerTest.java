@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.ignoreStubs;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static java.util.Arrays.asList;
@@ -61,6 +62,28 @@ class BookStoreControllerTest {
 		when(publisherRepository.findById("1")).thenReturn(existingPublisher);
 		bookStoreController.addNewPublisher(toAdd);
 		verify(publisherView).showError("Already existing publisher with id 1", existingPublisher);
+		verifyNoMoreInteractions(ignoreStubs(publisherRepository));
+	}
+	
+	@Test
+	@DisplayName("Delete Publisher when is present")
+	void testDeletePublisherWhenExists(){
+		Publisher publisher = new Publisher("1","test");
+		when(publisherRepository.findById("1")).thenReturn(publisher);
+		bookStoreController.deletePublisher(publisher);
+		InOrder inOrder = inOrder(publisherRepository,publisherView);
+		inOrder.verify(publisherRepository).delete("1");
+		inOrder.verify(publisherView).publisherRemoved(publisher);
+		verifyNoMoreInteractions(ignoreStubs(publisherRepository));
+	}
+	
+	@Test
+	@DisplayName("Delete publisher when is not present")
+	void testDeletePublisherWhenIsNotPresent(){
+		Publisher publisher = new Publisher("1","test");
+		when(publisherRepository.findById("1")).thenReturn(null);
+		bookStoreController.deletePublisher(publisher);
+		verify(publisherView).showError("No publisher with id 1", publisher);
 		verifyNoMoreInteractions(ignoreStubs(publisherRepository));
 	}
 }

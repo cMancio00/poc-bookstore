@@ -12,4 +12,6 @@ public interface PublisherView {
 
 	void showError(String string, Publisher publisher);
 
+	void publisherRemoved(Publisher publisher);
+
 }

@@ -12,4 +12,6 @@ public interface PublisherRepository {
 
 	void save(Publisher publisher);
 
+	void delete(String string);
+
 }
