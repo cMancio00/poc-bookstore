@@ -2,8 +2,9 @@ name: Java CI with Maven in Linux
 
 on:
     push:
-        branches-ignore:
-            - 'main'
+        branches:
+            - '*'
+            - '!main'
     pull_request:
 jobs:
     build:
