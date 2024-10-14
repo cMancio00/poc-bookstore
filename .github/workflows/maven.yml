@@ -9,9 +9,10 @@ jobs:
         strategy:
             matrix:
                 include:
-                    - java: [8, 17]
+                    - java: 8
                     - java: 11
                       additional-maven-args: "-Pjacoco"
+                    - java: 17
             fail-fast: false
         name: Buil with Java ${{ matrix.java }} on ubuntu-24.04
         steps:
