@@ -8,7 +8,10 @@ jobs:
         runs-on: ubuntu-24.04
         strategy:
             matrix:
-                java: [8, 11, 17]
+                include:
+                    - java: [8, 17]
+                    - java: 11
+                      additional-maven-args: "-Pjacoco"
             fail-fast: false
         name: Buil with Java ${{ matrix.java }} on ubuntu-24.04
         steps:
@@ -26,7 +29,7 @@ jobs:
                   key: ${{ runner.os }}-m2-jdk${{ matrix.java }}-${{ hashFiles('**/pom.xml', '**/*.yml') }}
                   restore-keys: ${{ runner.os }}-m2-
             - name: Build with Maven
-              run: mvn -f bookstore/pom.xml clean verify
+              run: mvn -f bookstore/pom.xml clean verify ${{ matrix.additional-maven-args }}
             - name: Generate JUnit Report
               run: mvn -f bookstore/pom.xml surefire-report:report-only site:site -DgenerateReports=false
               # the if referes to the Generate not the archive
