@@ -30,9 +30,11 @@ jobs:
               run: mvn -f bookstore/pom.xml clean verify
             - name: Generate JUnit Report
               run: mvn surefire-report:report-only site:site -DgenerateReports=false
-              if: ${{ failure() }}
+              # the if referes to the Generate not the archive
+              if: ${{ always() }}
             - name: Archive JUnit Report
               uses: actions/upload-artifact@v4
+              if: ${{ failure() }}
               with:
                 name: surefire-report-jdk-${{ matrix.java }}
                 path: '**/target/reports'
