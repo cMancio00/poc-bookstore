@@ -56,7 +56,7 @@ class BookStoreControllerTest {
 			inOrder.verify(publisherView).publisherAdded(publisher);
 		}
 
-/*		@Test
+		@Test
 		@DisplayName("Delete Publisher when is present")
 		void testDeletePublisherWhenExists() {
 			Publisher publisher = new Publisher("1", "test");
@@ -91,7 +91,7 @@ class BookStoreControllerTest {
 			bookStoreController.deletePublisher(publisher);
 			verify(publisherView).showError("No publisher with id 1", publisher);
 			verifyNoMoreInteractions(ignoreStubs(publisherRepository));
-		}*/
+		}
 
 	}
 }
