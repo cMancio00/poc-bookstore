@@ -57,3 +57,4 @@ jobs:
               with:
                 name: pit-report-jdk-11
                 path: '**/target/pit-reports'
+                compression-level: 9
