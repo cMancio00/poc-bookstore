@@ -17,6 +17,8 @@
 		<sonar.coverage.exclusions>**/model/Publisher.java</sonar.coverage.exclusions>
 		<sonar.junit.reportPaths>
 			${project.build.directory}/surefire-reports</sonar.junit.reportPaths>
+		<sonar.organization>cmancio00</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 
 	<dependencies>
