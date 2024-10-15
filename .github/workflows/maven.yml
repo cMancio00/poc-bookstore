@@ -18,6 +18,9 @@ jobs:
                     - java: 11
                       additional-maven-args: >
                         -Pjacoco,mutation-testing
+                        sonar:sonar
+                        -Dsonar.organization=cmancio00-github
+                        -Dsonar.host.url=https://sonarcloud.io
             fail-fast: false
         name: Buil with Java ${{ matrix.java }} on ubuntu-24.04
         steps:
@@ -39,9 +42,6 @@ jobs:
             - name: Build with Maven
               run: >
                 mvn clean verify ${{ matrix.additional-maven-args }}
-                sonar:sonar
-                -Dsonar.organization=cmancio00-github
-                -Dsonar.host.url=https://sonarcloud.io
               working-directory: ${{ env.workdir }}
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
