@@ -3,6 +3,7 @@ name: Java CI with Maven in Linux
 on:
     push:
     pull_request:
+permissions: write-all
 jobs:
     build:
         runs-on: ubuntu-24.04
