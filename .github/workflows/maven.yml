@@ -3,6 +3,8 @@ name: Java CI with Maven in Linux
 on:
     push:
     pull_request:
+permissions:
+    contents: write
 jobs:
     build:
         runs-on: ubuntu-24.04
@@ -15,7 +17,7 @@ jobs:
                     - java: 17
                     - java: 11
                       additional-maven-args: >
-                        -Pjacoco
+                        -Pjacoco,mutation-testing
             fail-fast: false
         name: Buil with Java ${{ matrix.java }} on ubuntu-24.04
         steps:
@@ -36,10 +38,10 @@ jobs:
               run: mvn clean verify ${{ matrix.additional-maven-args }}
               working-directory: ${{ env.workdir }}
             - name: Coveralls
-              if: contains(matrix.additional-maven-args, '-Pjacoco')
+              if: ${{ matrix.java == 11 }}
               uses: coverallsapp/github-action@v2
               env:
-                github-token: ${{ secrets.COVERALLS_TOKEN }}
+                github-token: ${{ secrets.GITHUB_TOKEN }}
             - name: Generate JUnit Report
               run: mvn surefire-report:report-only site:site -DgenerateReports=false
               working-directory: ${{ env.workdir }}
@@ -51,3 +53,16 @@ jobs:
               with:
                 name: surefire-report-jdk-${{ matrix.java }}
                 path: '**/target/reports'
+            - name: Archive mutation report
+              if: ${{ matrix.java == 11 }}
+              uses: actions/upload-artifact@v4
+              with:
+                name: pit-report-jdk-11
+                path: '**/target/pit-reports'
+                compression-level: 9
+            - name: Upload Pit report to GitHub Pages
+              if: ${{ matrix.java == 11 }}
+              uses: peaceiris/actions-gh-pages@v4
+              with:
+                github_token: ${{ secrets.GITHUB_TOKEN }}
+                publish_dir: '**/target/pit-reports'
