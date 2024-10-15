@@ -15,7 +15,7 @@ jobs:
                     - java: 17
                     - java: 11
                       additional-maven-args: >
-                        -Pjacoco
+                        -Pjacoco,mutation-testing
             fail-fast: false
         name: Buil with Java ${{ matrix.java }} on ubuntu-24.04
         steps:
@@ -36,7 +36,7 @@ jobs:
               run: mvn clean verify ${{ matrix.additional-maven-args }}
               working-directory: ${{ env.workdir }}
             - name: Coveralls
-              if: contains(matrix.additional-maven-args, '-Pjacoco')
+              if: ${{ matrix.java == 11 }}
               uses: coverallsapp/github-action@v2
               env:
                 github-token: ${{ secrets.COVERALLS_TOKEN }}
@@ -51,3 +51,9 @@ jobs:
               with:
                 name: surefire-report-jdk-${{ matrix.java }}
                 path: '**/target/reports'
+            - name: Archive mutation report
+              if: ${{ matrix.java == 11 }}
+              uses: actions/upload-artifact@v4
+              with:
+                name: pit-report-jdk-11
+                path: '**/target/pit-reports'
