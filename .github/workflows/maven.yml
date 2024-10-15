@@ -19,8 +19,7 @@ jobs:
                       additional-maven-args: >
                         -Pjacoco,mutation-testing
                         sonar:sonar
-                        -Dsonar.organization=cmancio00-github
-                        -Dsonar.host.url=https://sonarcloud.io
+                        -Dsonar.projectKey=cMancio00_poc-bookstore
             fail-fast: false
         name: Buil with Java ${{ matrix.java }} on ubuntu-24.04
         steps:
@@ -38,9 +37,15 @@ jobs:
               with:
                   path: |
                     ~/.m2
-                    ~/.sonar/cache
                   key: ${{ runner.os }}-m2-jdk${{ matrix.java }}-${{ hashFiles('**/pom.xml', '**/*.yml') }}
                   restore-keys: ${{ runner.os }}-m2-
+            - name: Cache Sonar Packages
+              if: ${{ matrix.java == 17 }}
+              uses: actions/cache@v4
+              with:
+                path: ~/.sonar/cache
+                key: ${{ runner.os }}-sonar
+                restore-keys: ${{ runner.os }}-sonar
             - name: Build with Maven
               run: >
                 mvn clean verify ${{ matrix.additional-maven-args }}
