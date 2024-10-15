@@ -9,12 +9,14 @@
 	<version>0.0.1-SNAPSHOT</version>
 
 	<name>bookstore</name>
-	<!-- FIXME change it to the project's website -->
-	<url>http://www.example.com</url>
+	<url>https://github.com/cMancio00/poc-bookstore</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.release>11</maven.compiler.release>
+		<sonar.coverage.exclusions>**/model/Publisher.java</sonar.coverage.exclusions>
+		<sonar.junit.reportPaths>
+			${project.build.directory}/surefire-reports</sonar.junit.reportPaths>
 	</properties>
 
 	<dependencies>
@@ -132,6 +134,11 @@
 						</mutators>
 						<mutationThreshold>80</mutationThreshold>
 					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.sonarsource.scanner.maven</groupId>
+					<artifactId>sonar-maven-plugin</artifactId>
+					<version>3.8.0.2131</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
