@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-24.04
     env:
       workdir: bookstore
+      github-token: ${{ secrets.GITHUB_TOKEN }}
     strategy:
       matrix:
         include:
@@ -67,8 +68,6 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           publish_dir: '**/target/pit-reports'
-          env:
-            github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Coveralls
         run: mvn coveralls:report -DrepoToken=${{ secrets.COVERALLS_TOKEN }}
