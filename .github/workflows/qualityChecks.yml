@@ -9,7 +9,6 @@ jobs:
     runs-on: ubuntu-24.04
     env:
       workdir: bookstore
-      github-token: ${{ secrets.GITHUB_TOKEN }}
     strategy:
       matrix:
         include:
@@ -67,6 +66,7 @@ jobs:
       - name: Upload Pit report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: '**/target/pit-reports'
 
       - name: Coveralls
