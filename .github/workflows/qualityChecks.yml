@@ -67,6 +67,8 @@ jobs:
               uses: peaceiris/actions-gh-pages@v4
               with:
                 publish_dir: '**/target/pit-reports'
+                env:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Coveralls
               run: mvn coveralls:report -DrepoToken=${{ secrets.COVERALLS_TOKEN }}
