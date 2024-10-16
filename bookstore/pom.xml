@@ -18,6 +18,7 @@
 		<sonar.junit.reportPaths>
 			${project.build.directory}/surefire-reports</sonar.junit.reportPaths>
 		<sonar.organization>cmancio00</sonar.organization>
+		<sonar.projectKey>cMancio00_poc-bookstore</sonar.projectKey>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 
