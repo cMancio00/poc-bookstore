@@ -83,15 +83,15 @@ class BookStoreControllerTest {
 			verifyNoMoreInteractions(ignoreStubs(publisherRepository));
 		}
 
-//		@Test
-//		@DisplayName("Delete publisher when is not present")
-//		void testDeletePublisherWhenIsNotPresent() {
-//			Publisher publisher = new Publisher("1", "test");
-//			when(publisherRepository.findById("1")).thenReturn(null);
-//			bookStoreController.deletePublisher(publisher);
-//			verify(publisherView).showError("No publisher with id 1", publisher);
-//			verifyNoMoreInteractions(ignoreStubs(publisherRepository));
-//		}
+		@Test
+		@DisplayName("Delete publisher when is not present")
+		void testDeletePublisherWhenIsNotPresent() {
+			Publisher publisher = new Publisher("1", "test");
+			when(publisherRepository.findById("1")).thenReturn(null);
+			bookStoreController.deletePublisher(publisher);
+			verify(publisherView).showError("No publisher with id 1", publisher);
+			verifyNoMoreInteractions(ignoreStubs(publisherRepository));
+		}
 
 	}
 }
