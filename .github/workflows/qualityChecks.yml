@@ -70,7 +70,7 @@ jobs:
           publish_dir: '**/target/pit-reports'
 
       - name: Coveralls
-        run: mvn coveralls:report -DrepoToken=${{ secrets.COVERALLS_TOKEN }}
+        run: mvn coveralls:report -DrepoToken=${{ secrets.COVERALLS_TOKEN }} -DpullRequest=${{ github.event.pull_request.number }}
         working-directory: ${{ env.workdir }}
 
       - name: SonarCloud
