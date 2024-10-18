@@ -72,5 +72,3 @@ jobs:
       - name: SonarCloud
         run: mvn sonar:sonar -Dsonar.token=${{ secrets.SONAR_TOKEN }}
         working-directory: ${{ env.workdir }}
-
-        
