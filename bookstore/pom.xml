@@ -13,8 +13,10 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.release>11</maven.compiler.release>
+		<maven.compiler.relese>1.8</maven.compiler.relese>
+		<packaging>jar</packaging>
 		<sonar.coverage.exclusions>**/model/Publisher.java</sonar.coverage.exclusions>
+		<sonar.coverage.exclusions>**/app/*</sonar.coverage.exclusions>
 		<sonar.junit.reportPaths>
 			${project.build.directory}/surefire-reports</sonar.junit.reportPaths>
 		<sonar.organization>cmancio00</sonar.organization>
@@ -40,6 +42,16 @@
 			<artifactId>mockito-junit-jupiter</artifactId>
 			<version>4.11.0</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>2.24.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>2.24.1</version>
 		</dependency>
 	</dependencies>
 
@@ -89,6 +101,7 @@
 					<artifactId>maven-project-info-reports-plugin</artifactId>
 					<version>3.6.1</version>
 				</plugin>
+
 				<plugin>
 					<groupId>org.jacoco</groupId>
 					<artifactId>jacoco-maven-plugin</artifactId>
@@ -96,6 +109,7 @@
 					<configuration>
 						<excludes>
 							<exclude>**/model/*</exclude>
+							<exclude>**/app/*</exclude>
 						</excludes>
 					</configuration>
 					<executions>
@@ -158,6 +172,31 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
+		<plugins>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-assembly-plugin</artifactId>
+			<version>3.7.1</version>
+			<executions>
+				<execution>
+					<phase>package</phase>
+					<goals>
+						<goal>single</goal>
+					</goals>
+					<configuration>
+						<descriptorRefs>
+							<descriptorRef>jar-with-dependencies</descriptorRef>
+						</descriptorRefs>
+						<archive>
+							<manifest>
+								<mainClass>mancio.bookstore.app.Main</mainClass>
+							</manifest>
+						</archive>
+					</configuration>
+				</execution>
+			</executions>
+		</plugin>
+		</plugins>
 	</build>
 	<profiles>
 		<profile>
@@ -185,6 +224,42 @@
 									<goal>mutationCoverage</goal>
 								</goals>
 								<phase>verify</phase>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>docker</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>io.fabric8</groupId>
+						<artifactId>docker-maven-plugin</artifactId>
+						<version>0.45.1</version>
+						<configuration>
+							<showLogs>true</showLogs>
+							<verbose>build</verbose>
+							<images>
+								<image>
+									<name>bookstore-maven</name>
+									<build>
+										<contextDir>${project.basedir}</contextDir>
+										<args>
+											<jarToCopy>${project.artifactId}-${project.version}-jar-with-dependencies.jar</jarToCopy>
+										</args>
+									</build>
+								</image>
+							</images>
+						</configuration>
+						<executions>
+							<execution>
+								<id>docker-build-image</id>
+								<phase>package</phase>
+								<goals>
+									<goal>build</goal>
+								</goals>
 							</execution>
 						</executions>
 					</plugin>
