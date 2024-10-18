@@ -34,8 +34,13 @@ jobs:
 
             - name: Build with Maven
               run: >
-                mvn clean verify
+                mvn clean verify -Pjacoco
               working-directory: ${{ env.workdir }}
+
+            - name: Coveralls
+              run: mvn coveralls:report -DrepoToken=${{ secrets.COVERALLS_TOKEN }}
+              working-directory: ${{ env.workdir }}
+              if: ${{ matrix.java == 11 }}
 
             - name: Generate JUnit Report
               run: mvn surefire-report:report-only site:site -DgenerateReports=false
