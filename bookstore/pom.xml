@@ -159,7 +159,7 @@
 				<plugin>
 					<groupId>com.github.hazendaz.maven</groupId>
 					<artifactId>coveralls-maven-plugin</artifactId>
-					<version>4.5.0-M2</version>
+					<version>4.5.0-M5</version>
 					<dependencies>
 						<!-- This is required when using JDK 9 or higher
 						since javax.xml.bind has been removed from the JDK -->
