@@ -43,6 +43,16 @@
 			<version>4.11.0</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>2.24.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>2.24.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -91,28 +101,7 @@
 					<artifactId>maven-project-info-reports-plugin</artifactId>
 					<version>3.6.1</version>
 				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-assembly-plugin</artifactId>
-					<executions>
-						<execution>
-							<phase>package</phase>
-							<goals>
-								<goal>single</goal>
-							</goals>
-							<configuration>
-								<descriptorRefs>
-									<descriptorRef>jar-with-dependencies</descriptorRef>
-								</descriptorRefs>
-								<archive>
-									<manifest>
-										<mainClass>mancio.bookstore.app.Main</mainClass>
-									</manifest>
-								</archive>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
+
 				<plugin>
 					<groupId>org.jacoco</groupId>
 					<artifactId>jacoco-maven-plugin</artifactId>
@@ -183,6 +172,31 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
+		<plugins>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-assembly-plugin</artifactId>
+			<version>3.7.1</version>
+			<executions>
+				<execution>
+					<phase>package</phase>
+					<goals>
+						<goal>single</goal>
+					</goals>
+					<configuration>
+						<descriptorRefs>
+							<descriptorRef>jar-with-dependencies</descriptorRef>
+						</descriptorRefs>
+						<archive>
+							<manifest>
+								<mainClass>mancio.bookstore.app.Main</mainClass>
+							</manifest>
+						</archive>
+					</configuration>
+				</execution>
+			</executions>
+		</plugin>
+		</plugins>
 	</build>
 	<profiles>
 		<profile>
@@ -233,7 +247,7 @@
 									<build>
 										<contextDir>${project.basedir}</contextDir>
 										<args>
-											<jarToCopy>${project.artifactId}-${project.version}.jar</jarToCopy>
+											<jarToCopy>${project.artifactId}-${project.version}-jar-with-dependencies.jar</jarToCopy>
 										</args>
 									</build>
 								</image>
