@@ -1,6 +1,7 @@
 name: Code Quality Checks
 
 on:
+  push:
   pull_request:
 permissions:
   contents: write
@@ -70,11 +71,9 @@ jobs:
           publish_dir: '**/target/pit-reports'
 
       - name: Coveralls
-        run: mvn coveralls:report -DrepoToken=${{ secrets.COVERALLS_TOKEN }}
-        working-directory: ${{ env.workdir }}
+        env:
+         github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: SonarCloud
         run: mvn sonar:sonar -Dsonar.token=${{ secrets.SONAR_TOKEN }}
         working-directory: ${{ env.workdir }}
-
-        
