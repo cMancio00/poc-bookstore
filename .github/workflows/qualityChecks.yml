@@ -71,6 +71,7 @@ jobs:
           publish_dir: '**/target/pit-reports'
 
       - name: Coveralls
+        uses: coverallsapp/github-action@v2
         env:
          github-token: ${{ secrets.GITHUB_TOKEN }}
 
