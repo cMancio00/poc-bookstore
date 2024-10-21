@@ -1,5 +1,7 @@
 package mancio.bookstore.model;
 
+import java.util.Objects;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,6 +24,12 @@ public class Publisher {
 	public Publisher(String name) {
 		this.name = name;
 	}
+	
+	public Publisher(int id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+	
 
 	public int getId() {
 		return id;
@@ -33,6 +41,21 @@ public class Publisher {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, name);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof Publisher))
+			return false;
+		Publisher other = (Publisher) obj;
+		return id == other.id && Objects.equals(name, other.name);
 	}
 
 	@Override
