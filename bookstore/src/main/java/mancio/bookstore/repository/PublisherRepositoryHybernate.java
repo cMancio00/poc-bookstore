@@ -28,14 +28,15 @@ public class PublisherRepositoryHybernate implements PublisherRepository {
 
 	@Override
 	public void save(Publisher publisher) {
-		// TODO Auto-generated method stub
-
+		sessionFactory.inTransaction(session ->
+			session.merge(publisher));
 	}
 
 	@Override
 	public void delete(int id) {
-		// TODO Auto-generated method stub
-
+		sessionFactory.inTransaction(session ->
+			session.remove(
+					session.find(Publisher.class, id)));
 	}
 
 }
