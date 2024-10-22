@@ -16,7 +16,7 @@
 		<maven.compiler.source>11</maven.compiler.source>
 		<maven.compiler.target>11</maven.compiler.target>
 		<packaging>jar</packaging>
-		<sonar.coverage.exclusions>**/model/Publisher.java</sonar.coverage.exclusions>
+		<sonar.coverage.exclusions>**/model/*</sonar.coverage.exclusions>
 		<sonar.coverage.exclusions>**/app/*</sonar.coverage.exclusions>
 		<sonar.junit.reportPaths>
 			${project.build.directory}/surefire-reports</sonar.junit.reportPaths>
@@ -72,6 +72,13 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>8.0.30</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>testcontainers</artifactId>
+			<version>1.20.2</version>
+			<scope>test</scope>
 		</dependency>
 
 	</dependencies>
@@ -161,10 +168,12 @@
 						<targetClasses>
 							<!-- Classes to mutate -->
 							<param>mancio.bookstore.controller.*</param>
+							<param>mancio.bookstore.repository.*</param>
 						</targetClasses>
 						<targetTests>
 							<!-- Test to use -->
 							<param>mancio.bookstore.controller.*</param>
+							<param>mancio.bookstore.repository.*</param>
 						</targetTests>
 						<mutators>
 							<mutator>STRONGER</mutator>
