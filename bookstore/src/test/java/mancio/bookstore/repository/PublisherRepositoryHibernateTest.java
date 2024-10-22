@@ -11,17 +11,33 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import mancio.bookstore.model.Publisher;
 
-class PublisherRepositoryHybernateTest {
+@Testcontainers
+class PublisherRepositoryHibernateTest {
 
+	@SuppressWarnings({ "rawtypes", "resource" })
+	@Container
+	public static final MySQLContainer mysql = 
+		new MySQLContainer("mysql:8.0.28")
+			.withDatabaseName("bookstore-db")
+			.withUsername("bookstore-manager")
+			.withPassword("test");
+
+	
 	private static SessionFactory sessionFactory;
 	private PublisherRepositoryHybernate publisherRepository;
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
+		System.setProperty("hibernate.connection.url", mysql.getJdbcUrl());
+		System.setProperty("hibernate.connection.username", mysql.getUsername());
+		System.setProperty("hibernate.connection.password", mysql.getPassword());
+		System.setProperty("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver");
 		sessionFactory = new Configuration().configure().buildSessionFactory();
 	}
 
