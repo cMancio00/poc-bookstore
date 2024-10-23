@@ -43,7 +43,7 @@ jobs:
                   restore-keys: ${{ runner.os }}-docker-
 
             - name: Build with Maven
-              run: >
+              run: |
                 mvn docker:start
                 mvn clean verify
                 mvn docker:stop
