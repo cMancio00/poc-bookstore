@@ -116,11 +116,6 @@
 				<plugin>
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>3.3.0</version>
-					<configuration>
-						<systemPropertyVariables>
-							<mysql.port>${mysql.mapped.port}</mysql.port>
-						</systemPropertyVariables>
-					</configuration>
 				</plugin>
 				<plugin>
 					<artifactId>maven-jar-plugin</artifactId>
@@ -194,7 +189,11 @@
 							<mutator>STRONGER</mutator>
 						</mutators>
 						<mutationThreshold>80</mutationThreshold>
-						<threads>1</threads>
+						<historyInputFile>${project.basedir}/pitHistory</historyInputFile>
+							<historyOutputFile>${project.basedir}/pitHistory</historyOutputFile>
+							<features>
+								<feature>+auto_threads</feature>
+							</features>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -283,6 +282,7 @@
 					<plugin>
 						<groupId>org.pitest</groupId>
 						<artifactId>pitest-maven</artifactId>
+
 						<executions>
 							<execution>
 								<goals>

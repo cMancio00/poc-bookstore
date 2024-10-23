@@ -51,8 +51,18 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
+      - name: Cache Pit history
+        uses: actions/chache@v4
+        with:
+          path: ${{ env.workdir }}
+          key: ${{ runner.os }}-pit
+          restore-keys: ${{ runner.os }}-pit
+
       - name: Build with Maven
-        run: mvn clean verify -Pjacoco,mutation-testing
+        run: >
+            mvn docker:start
+            mvn clean verify -Pjacoco,mutation-testing
+            mvn docker:stop
         working-directory: ${{ env.workdir }}
 
       - name: Generate JUnit Report
