@@ -49,7 +49,7 @@ class BookStoreControllerTest {
 		@Test
 		@DisplayName("New Publisher when is not already existing")
 		void testNewPublisherWhenNotAlreadyExisting() {
-			Publisher publisher = new Publisher("1", "test");
+			Publisher publisher = new Publisher("test");
 			bookStoreController.addNewPublisher(publisher);
 			InOrder inOrder = inOrder(publisherRepository, publisherView);
 			inOrder.verify(publisherRepository).save(publisher);
@@ -59,11 +59,11 @@ class BookStoreControllerTest {
 		@Test
 		@DisplayName("Delete Publisher when is present")
 		void testDeletePublisherWhenExists() {
-			Publisher publisher = new Publisher("1", "test");
-			when(publisherRepository.findById("1")).thenReturn(publisher);
+			Publisher publisher = new Publisher(1,"test");
+			when(publisherRepository.findById(1)).thenReturn(publisher);
 			bookStoreController.deletePublisher(publisher);
 			InOrder inOrder = inOrder(publisherRepository, publisherView);
-			inOrder.verify(publisherRepository).delete("1");
+			inOrder.verify(publisherRepository).delete(1);
 			inOrder.verify(publisherView).publisherRemoved(publisher);
 			verifyNoMoreInteractions(ignoreStubs(publisherRepository));
 		}
@@ -75,9 +75,9 @@ class BookStoreControllerTest {
 		@Test
 		@DisplayName("New Publisher when is already present")
 		void testNewPublisherWhenExisting() {
-			Publisher existingPublisher = new Publisher("1", "existing");
-			Publisher toAdd = new Publisher("1", "toAdd");
-			when(publisherRepository.findById("1")).thenReturn(existingPublisher);
+			Publisher existingPublisher = new Publisher(1,"existing");
+			Publisher toAdd = new Publisher(1,"toAdd");
+			when(publisherRepository.findById(1)).thenReturn(existingPublisher);
 			bookStoreController.addNewPublisher(toAdd);
 			verify(publisherView).showError("Already existing publisher with id 1", existingPublisher);
 			verifyNoMoreInteractions(ignoreStubs(publisherRepository));
@@ -86,8 +86,8 @@ class BookStoreControllerTest {
 		@Test
 		@DisplayName("Delete publisher when is not present")
 		void testDeletePublisherWhenIsNotPresent() {
-			Publisher publisher = new Publisher("1", "test");
-			when(publisherRepository.findById("1")).thenReturn(null);
+			Publisher publisher = new Publisher(1,"test");
+			when(publisherRepository.findById(1)).thenReturn(null);
 			bookStoreController.deletePublisher(publisher);
 			verify(publisherView).showError("No publisher with id 1", publisher);
 			verifyNoMoreInteractions(ignoreStubs(publisherRepository));

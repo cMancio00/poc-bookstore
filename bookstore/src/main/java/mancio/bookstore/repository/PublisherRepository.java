@@ -8,10 +8,10 @@ public interface PublisherRepository {
 
 	List<Publisher> findAll();
 
-	Publisher findById(String string);
+	Publisher findById(int id);
 
 	void save(Publisher publisher);
 
-	void delete(String string);
+	void delete(int id);
 
 }

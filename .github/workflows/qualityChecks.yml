@@ -36,6 +36,14 @@ jobs:
           key: ${{ runner.os }}-m2-jdk${{ matrix.java }}-${{ hashFiles('**/pom.xml', '**/*.yml') }}
           restore-keys: ${{ runner.os }}-m2-
 
+      - name: Cache Docker images
+        uses: actions/cache@v4
+        with:
+            path:
+                /var/lib/docker
+            key: ${{ runner.os }}-docker-${{ hashFiles('**/pom.xml') }}
+            restore-keys: ${{ runner.os }}-docker-
+
       - name: Cache Sonar Packages
         uses: actions/cache@v4
         with:
@@ -43,8 +51,16 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
+      - name: Cache Pit history
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.workdir }}
+          key: ${{ runner.os }}-pit
+          restore-keys: ${{ runner.os }}-pit
+
       - name: Build with Maven
-        run: mvn clean verify -Pjacoco,mutation-testing
+        run: |
+            mvn clean verify -Pjacoco,mutation-testing
         working-directory: ${{ env.workdir }}
 
       - name: Generate JUnit Report

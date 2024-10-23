@@ -13,15 +13,21 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.relese>1.8</maven.compiler.relese>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
 		<packaging>jar</packaging>
-		<sonar.coverage.exclusions>**/model/Publisher.java</sonar.coverage.exclusions>
-		<sonar.coverage.exclusions>**/app/*</sonar.coverage.exclusions>
+		<sonar.coverage.exclusions>
+			**/model/*,
+			**/app/*
+		</sonar.coverage.exclusions>
 		<sonar.junit.reportPaths>
 			${project.build.directory}/surefire-reports</sonar.junit.reportPaths>
 		<sonar.organization>cmancio00</sonar.organization>
 		<sonar.projectKey>cMancio00_poc-bookstore</sonar.projectKey>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<mysql.version>8.0.28</mysql.version>
+
+
 	</properties>
 
 	<dependencies>
@@ -35,6 +41,18 @@
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
 			<version>5.11.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>1.20.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>3.26.3</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -53,6 +71,35 @@
 			<artifactId>log4j-core</artifactId>
 			<version>2.24.1</version>
 		</dependency>
+
+		<!-- Hibernate Core -->
+		<dependency>
+			<groupId>org.hibernate.orm</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>6.6.1.Final</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>mysql</artifactId>
+			<version>1.20.2</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- MySQL Connector -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.30</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>2.3.232</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -140,15 +187,22 @@
 						<targetClasses>
 							<!-- Classes to mutate -->
 							<param>mancio.bookstore.controller.*</param>
+							<param>mancio.bookstore.repository.*</param>
 						</targetClasses>
 						<targetTests>
 							<!-- Test to use -->
 							<param>mancio.bookstore.controller.*</param>
+							<param>mancio.bookstore.repository.*</param>
 						</targetTests>
 						<mutators>
 							<mutator>STRONGER</mutator>
 						</mutators>
 						<mutationThreshold>80</mutationThreshold>
+						<historyInputFile>${project.basedir}/pitHistory</historyInputFile>
+						<historyOutputFile>${project.basedir}/pitHistory</historyOutputFile>
+						<features>
+							<feature>+auto_threads</feature>
+						</features>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -159,29 +213,30 @@
 			</plugins>
 		</pluginManagement>
 		<plugins>
-		<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-assembly-plugin</artifactId>
-			<version>3.7.1</version>
-			<executions>
-				<execution>
-					<phase>package</phase>
-					<goals>
-						<goal>single</goal>
-					</goals>
-					<configuration>
-						<descriptorRefs>
-							<descriptorRef>jar-with-dependencies</descriptorRef>
-						</descriptorRefs>
-						<archive>
-							<manifest>
-								<mainClass>mancio.bookstore.app.Main</mainClass>
-							</manifest>
-						</archive>
-					</configuration>
-				</execution>
-			</executions>
-		</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.7.1</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+							<archive>
+								<manifest>
+									<mainClass>mancio.bookstore.app.Main</mainClass>
+								</manifest>
+							</archive>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
 	<profiles>
@@ -204,6 +259,7 @@
 					<plugin>
 						<groupId>org.pitest</groupId>
 						<artifactId>pitest-maven</artifactId>
+
 						<executions>
 							<execution>
 								<goals>
@@ -233,7 +289,8 @@
 									<build>
 										<contextDir>${project.basedir}</contextDir>
 										<args>
-											<jarToCopy>${project.artifactId}-${project.version}-jar-with-dependencies.jar</jarToCopy>
+											<jarToCopy>
+												${project.artifactId}-${project.version}-jar-with-dependencies.jar</jarToCopy>
 										</args>
 									</build>
 								</image>
