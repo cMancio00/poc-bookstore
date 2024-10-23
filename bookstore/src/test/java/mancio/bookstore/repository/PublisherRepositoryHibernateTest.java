@@ -16,7 +16,7 @@ class PublisherRepositoryHibernateTest {
 	private static final String CONNECTION_URL = String.format("jdbc:h2:mem:%s", H2_DATABASE);
 
 	private static SessionFactory sessionFactory;
-	private PublisherRepositoryHibernate publisherRepository;
+	private PublisherRepository publisherRepository;
 
 	@BeforeEach
 	void setUp() {

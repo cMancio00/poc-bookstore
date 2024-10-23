@@ -1,11 +1,15 @@
 package mancio.bookstore.controller;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import mancio.bookstore.app.Main;
 import mancio.bookstore.model.Publisher;
 import mancio.bookstore.repository.PublisherRepository;
 import mancio.bookstore.view.PublisherView;
 
 public class BookStoreController {
-
+	private static final Logger LOGGER = LogManager.getLogger(BookStoreController.class);
 	private PublisherRepository publisherRepository;
 	private PublisherView publisherView;
 
@@ -25,17 +29,17 @@ public class BookStoreController {
 			publisherRepository.save(publisher);
 			publisherView.publisherAdded(publisher);
 		} else {
-			publisherView.showError("Already existing publisher with id " + foundPublisher.getId(), foundPublisher);
+			publisherView.showError("Already existing publisher with id " + foundPublisher.getId());
 		}
 	}
 
-	public void deletePublisher(Publisher publisher) {
-		Publisher foundPublisher = publisherRepository.findById(publisher.getId());
+	public void deletePublisher(int id) {
+		Publisher foundPublisher = publisherRepository.findById(id);
 		if (foundPublisher != null) {
 			publisherRepository.delete(foundPublisher.getId());
-			publisherView.publisherRemoved(publisher);
+			publisherView.publisherRemoved(foundPublisher);
 		}else
-			publisherView.showError("No publisher with id " + publisher.getId(), publisher);
+			publisherView.showError("No publisher with id " + id);
 	}
 
 }
