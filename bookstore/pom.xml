@@ -208,38 +208,6 @@
 					<artifactId>sonar-maven-plugin</artifactId>
 					<version>3.8.0.2131</version>
 				</plugin>
-				<plugin>
-					<groupId>io.fabric8</groupId>
-					<artifactId>docker-maven-plugin</artifactId>
-					<version>0.34.1</version>
-					<configuration>
-
-						<showLogs>true</showLogs>
-						<images>
-							<image>
-								<alias>test-db</alias>
-								<name>mysql:${mysql.version}</name>
-								<run>
-									<env>
-										<MYSQL_ROOT_PASSWORD>root</MYSQL_ROOT_PASSWORD>
-										<MYSQL_DATABASE>bookstore</MYSQL_DATABASE>
-										<MYSQL_USER>bookstore-manager</MYSQL_USER>
-										<MYSQL_PASSWORDWORD>test</MYSQL_PASSWORDWORD>
-									</env>
-									<wait>
-										<tcp>
-											<host>localhost</host>
-											<ports>
-												<port>3306</port>
-											</ports>
-										</tcp>
-										<time>30000</time>
-									</wait>
-								</run>
-							</image>
-						</images>
-					</configuration>
-				</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
