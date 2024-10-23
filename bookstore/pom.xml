@@ -91,6 +91,13 @@
 			<version>8.0.30</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>2.3.232</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -190,10 +197,10 @@
 						</mutators>
 						<mutationThreshold>80</mutationThreshold>
 						<historyInputFile>${project.basedir}/pitHistory</historyInputFile>
-							<historyOutputFile>${project.basedir}/pitHistory</historyOutputFile>
-							<features>
-								<feature>+auto_threads</feature>
-							</features>
+						<historyOutputFile>${project.basedir}/pitHistory</historyOutputFile>
+						<features>
+							<feature>+auto_threads</feature>
+						</features>
 					</configuration>
 				</plugin>
 				<plugin>
