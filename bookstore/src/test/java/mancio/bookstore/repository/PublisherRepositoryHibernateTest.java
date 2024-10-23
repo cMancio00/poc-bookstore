@@ -11,33 +11,26 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.testcontainers.containers.MySQLContainer;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import mancio.bookstore.model.Publisher;
 
 @Testcontainers
 class PublisherRepositoryHibernateTest {
-
-	@SuppressWarnings({ "rawtypes", "resource" })
-	@Container
-	public static final MySQLContainer mysql = 
-		new MySQLContainer("mysql:8.0.28")
-			.withDatabaseName("bookstore-db")
-			.withUsername("bookstore-manager")
-			.withPassword("test");
-
+	
+	private static final String MYSQL_DATABASE = "bookstore";
+	private static final int MYSQL_PORT = 3306;
+	private static final  String CONNECTION_URL = String.format("jdbc:mysql://localhost:%d/%s", MYSQL_PORT, MYSQL_DATABASE);
+	
 	
 	private static SessionFactory sessionFactory;
-	private PublisherRepositoryHybernate publisherRepository;
-
+	private PublisherRepositoryHibernate publisherRepository;
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		System.setProperty("hibernate.connection.url", mysql.getJdbcUrl());
-		System.setProperty("hibernate.connection.username", mysql.getUsername());
-		System.setProperty("hibernate.connection.password", mysql.getPassword());
+		System.setProperty("hibernate.connection.url",CONNECTION_URL);
 		System.setProperty("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver");
+		System.setProperty("hibernate.connection.username", "bookstore-manager");
+		System.setProperty("hibernate.connection.password", "test");
 		sessionFactory = new Configuration().configure().buildSessionFactory();
 	}
 
@@ -49,7 +42,7 @@ class PublisherRepositoryHibernateTest {
 	@BeforeEach
 	void setUp() {
 		sessionFactory.getCache().evictAllRegions();
-		publisherRepository = new PublisherRepositoryHybernate(sessionFactory);
+		publisherRepository = new PublisherRepositoryHibernate(sessionFactory);
 	}
 
 	@AfterEach

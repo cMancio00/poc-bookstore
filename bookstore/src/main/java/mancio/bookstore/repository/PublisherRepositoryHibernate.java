@@ -6,11 +6,11 @@ import org.hibernate.SessionFactory;
 
 import mancio.bookstore.model.Publisher;
 
-public class PublisherRepositoryHybernate implements PublisherRepository {
+public class PublisherRepositoryHibernate implements PublisherRepository {
 
 	private SessionFactory sessionFactory;
 
-	public PublisherRepositoryHybernate(SessionFactory sessionFactory) {
+	public PublisherRepositoryHibernate(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
 

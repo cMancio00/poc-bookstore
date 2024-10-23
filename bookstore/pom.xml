@@ -23,6 +23,9 @@
 		<sonar.organization>cmancio00</sonar.organization>
 		<sonar.projectKey>cMancio00_poc-bookstore</sonar.projectKey>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<mysql.version>8.0.28</mysql.version>
+
+
 	</properties>
 
 	<dependencies>
@@ -113,6 +116,11 @@
 				<plugin>
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>3.3.0</version>
+					<configuration>
+						<systemPropertyVariables>
+							<mysql.port>${mysql.mapped.port}</mysql.port>
+						</systemPropertyVariables>
+					</configuration>
 				</plugin>
 				<plugin>
 					<artifactId>maven-jar-plugin</artifactId>
@@ -186,12 +194,45 @@
 							<mutator>STRONGER</mutator>
 						</mutators>
 						<mutationThreshold>80</mutationThreshold>
+						<threads>1</threads>
 					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.sonarsource.scanner.maven</groupId>
 					<artifactId>sonar-maven-plugin</artifactId>
 					<version>3.8.0.2131</version>
+				</plugin>
+				<plugin>
+					<groupId>io.fabric8</groupId>
+					<artifactId>docker-maven-plugin</artifactId>
+					<version>0.34.1</version>
+					<configuration>
+
+						<showLogs>true</showLogs>
+						<images>
+							<image>
+								<alias>test-db</alias>
+								<name>mysql:${mysql.version}</name>
+								<run>
+									<env>
+										<MYSQL_ROOT_PASSWORD>root</MYSQL_ROOT_PASSWORD>
+										<MYSQL_DATABASE>bookstore</MYSQL_DATABASE>
+										<MYSQL_USER>bookstore-manager</MYSQL_USER>
+										<MYSQL_PASSWORDWORD>test</MYSQL_PASSWORDWORD>
+									</env>
+									<wait>
+										<tcp>
+											<host>localhost</host>
+											<ports>
+												<port>3306</port>
+											</ports>
+										</tcp>
+										<time>30000</time>
+									</wait>
+								</run>
+							</image>
+						</images>
+					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -219,6 +260,7 @@
 					</execution>
 				</executions>
 			</plugin>
+
 		</plugins>
 	</build>
 	<profiles>
