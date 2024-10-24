@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -28,7 +29,7 @@ import mancio.bookstore.view.PublisherView;
 
 @Testcontainers
 @ExtendWith(MockitoExtension.class)
-@DisplayName("Controller-Repository IT")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class BookstoreControllerRepositoryIT {
 
 	@SuppressWarnings({ "rawtypes", "resource" })
@@ -72,7 +73,8 @@ class BookstoreControllerRepositoryIT {
 	void tearDown() {
 		sessionFactory.getSchemaManager().truncateMappedObjects();
 	}
-
+	
+	
 	@Test
 	@DisplayName("Find all publishers")
 	void testFindAllPublishers() {
