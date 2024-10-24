@@ -12,18 +12,19 @@ import org.junit.jupiter.api.Test;
 import mancio.bookstore.model.Publisher;
 
 class PublisherRepositoryHibernateTest {
-	private static final String H2_DATABASE = "bookstore";
+	private static final String H2_DATABASE = "test-db";
 	private static final String CONNECTION_URL = String.format("jdbc:h2:mem:%s", H2_DATABASE);
 
 	private static SessionFactory sessionFactory;
 	private PublisherRepository publisherRepository;
 
+	
+	
 	@BeforeEach
 	void setUp() {
-		System.setProperty("hibernate.connection.url", CONNECTION_URL);
-		System.setProperty("hibernate.connection.driver_class", "org.h2.Driver");
-		System.setProperty("hbm2ddl.auto", "create-drop");
-		sessionFactory = new Configuration().configure().buildSessionFactory();
+		Configuration configuration = new Configuration();
+		configuration.setProperty("hibernate.connection.url", CONNECTION_URL);
+		sessionFactory = configuration.configure("hibernate-unit.cfg.xml").buildSessionFactory();
 		publisherRepository = new PublisherRepositoryHibernate(sessionFactory);
 	}
 
