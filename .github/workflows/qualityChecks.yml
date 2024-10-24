@@ -36,14 +36,6 @@ jobs:
           key: ${{ runner.os }}-m2-jdk${{ matrix.java }}-${{ hashFiles('**/pom.xml', '**/*.yml') }}
           restore-keys: ${{ runner.os }}-m2-
 
-      - name: Cache Docker images
-        uses: actions/cache@v4
-        with:
-            path:
-                /var/lib/docker
-            key: ${{ runner.os }}-docker-${{ hashFiles('**/pom.xml') }}
-            restore-keys: ${{ runner.os }}-docker-
-
       - name: Cache Sonar Packages
         uses: actions/cache@v4
         with:
@@ -64,14 +56,14 @@ jobs:
         working-directory: ${{ env.workdir }}
 
       - name: Generate JUnit Report
-        run: mvn surefire-report:report-only site:site -DgenerateReports=false
+        run: mvn surefire-report:report-only surefire-report:failsafe-report-only site:site -DgenerateReports=false
         working-directory: ${{ env.workdir }}
         if: ${{ always() }}
       - name: Archive JUnit Report
         uses: actions/upload-artifact@v4
         if: ${{ failure() }}
         with:
-          name: surefire-report-jdk-${{ matrix.java }}
+          name: test-report-jdk-${{ matrix.java }}
           path: '**/target/reports'
 
       - name: Archive mutation report

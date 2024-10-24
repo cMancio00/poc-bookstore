@@ -10,7 +10,7 @@ public interface PublisherView {
 
 	void publisherAdded(Publisher publisher);
 
-	void showError(String string, Publisher publisher);
+	void showError(String string);
 
 	void publisherRemoved(Publisher publisher);
 

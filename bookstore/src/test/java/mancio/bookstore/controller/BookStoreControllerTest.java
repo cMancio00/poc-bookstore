@@ -61,7 +61,7 @@ class BookStoreControllerTest {
 		void testDeletePublisherWhenExists() {
 			Publisher publisher = new Publisher(1,"test");
 			when(publisherRepository.findById(1)).thenReturn(publisher);
-			bookStoreController.deletePublisher(publisher);
+			bookStoreController.deletePublisher(publisher.getId());
 			InOrder inOrder = inOrder(publisherRepository, publisherView);
 			inOrder.verify(publisherRepository).delete(1);
 			inOrder.verify(publisherView).publisherRemoved(publisher);
@@ -79,7 +79,7 @@ class BookStoreControllerTest {
 			Publisher toAdd = new Publisher(1,"toAdd");
 			when(publisherRepository.findById(1)).thenReturn(existingPublisher);
 			bookStoreController.addNewPublisher(toAdd);
-			verify(publisherView).showError("Already existing publisher with id 1", existingPublisher);
+			verify(publisherView).showError("Already existing publisher with id 1");
 			verifyNoMoreInteractions(ignoreStubs(publisherRepository));
 		}
 
@@ -88,8 +88,8 @@ class BookStoreControllerTest {
 		void testDeletePublisherWhenIsNotPresent() {
 			Publisher publisher = new Publisher(1,"test");
 			when(publisherRepository.findById(1)).thenReturn(null);
-			bookStoreController.deletePublisher(publisher);
-			verify(publisherView).showError("No publisher with id 1", publisher);
+			bookStoreController.deletePublisher(publisher.getId());
+			verify(publisherView).showError("No publisher with id 1");
 			verifyNoMoreInteractions(ignoreStubs(publisherRepository));
 		}
 

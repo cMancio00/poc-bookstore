@@ -25,17 +25,17 @@ public class BookStoreController {
 			publisherRepository.save(publisher);
 			publisherView.publisherAdded(publisher);
 		} else {
-			publisherView.showError("Already existing publisher with id " + foundPublisher.getId(), foundPublisher);
+			publisherView.showError("Already existing publisher with id " + foundPublisher.getId());
 		}
 	}
 
-	public void deletePublisher(Publisher publisher) {
-		Publisher foundPublisher = publisherRepository.findById(publisher.getId());
+	public void deletePublisher(int id) {
+		Publisher foundPublisher = publisherRepository.findById(id);
 		if (foundPublisher != null) {
 			publisherRepository.delete(foundPublisher.getId());
-			publisherView.publisherRemoved(publisher);
+			publisherView.publisherRemoved(foundPublisher);
 		}else
-			publisherView.showError("No publisher with id " + publisher.getId(), publisher);
+			publisherView.showError("No publisher with id " + id);
 	}
 
 }
