@@ -24,11 +24,11 @@ jobs:
                   restore-keys: ${{ runner.os }}-m2-
 
             - name: Build with Maven
-              run: mvn pom.xml clean verify -Pskip-integration
+              run: mvn clean verify -Pskip-integration
               working-directory: ${{ env.workdir }}
 
             - name: Generate JUnit Report
-              run: mvn pom.xml surefire-report:report-only site:site -DgenerateReports=false
+              run: mvn surefire-report:report-only site:site -DgenerateReports=false
               working-directory: ${{ env.workdir }}
               if: ${{ always() }}
             - name: Archive JUnit Report
